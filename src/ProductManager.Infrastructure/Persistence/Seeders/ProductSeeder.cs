@@ -4,27 +4,26 @@ using Microsoft.Extensions.Logging;
 namespace ProductManager.Infrastructure.Persistence.Seeders;
 
 /// <summary>
-/// Veritabanına ürün verilerini seed eden sınıf.
-/// Veritabanında ürün verileri yoksa örnek ürünler ekler.
+/// VeritabanÄ±na Ã¼rÃ¼n verilerini seed eden sÄ±nÄ±f.
+/// VeritabanÄ±nda Ã¼rÃ¼n verileri yoksa Ã¶rnek Ã¼rÃ¼nler ekler.
 /// </summary>
 public sealed class ProductSeeder(ApplicationDbContext dbContext, ILogger<ProductSeeder> logger) : BaseSeeder
 {
     /// <summary>
-    /// Veritabanına ürün verilerini seed eder.
-    /// Eğer ürün verileri zaten varsa, ekleme yapılmaz.
+    /// VeritabanÄ±na Ã¼rÃ¼n verilerini seed eder.
+    /// EÄŸer Ã¼rÃ¼n verileri zaten varsa, ekleme yapÄ±lmaz.
     /// </summary>
-    /// <returns>Asenkron görev tamamlandığında Task döner.</returns>
     public async override Task SeedAsync()
     {
-        // Loglama: Seeding işlemi başlatıldı
+        // Loglama: Seeding iÅŸlemi baÅŸlatÄ±ldÄ±
         logger.LogInformation("Starting product seeding...");
 
-        // Eğer veritabanında ürün yoksa, örnek ürünler eklenir
+        // EÄŸer veritabanÄ±nda Ã¼rÃ¼n yoksa, Ã¶rnek Ã¼rÃ¼nler eklenir
         if (!dbContext.Products.Any())
         {
             dbContext.Products.AddRange(
-                new Product { Name = "Bilgisayar", Price = 10000, Description = "8Gb RAM ve i5 işlemci" },
-                new Product { Name = "Monitör", Price = 2000, Description = "Asus ekran" },
+                new Product { Name = "Bilgisayar", Price = 10000, Description = "8Gb RAM ve i5 iÅŸlemci" },
+                new Product { Name = "MonitÃ¶r", Price = 2000, Description = "Asus ekran" },
                 new Product { Name = "Klavye", Price = 300, Description = "Q Klavye" }
             );
 

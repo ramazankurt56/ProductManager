@@ -1,4 +1,7 @@
+version: '3.8'
+
 services:
+  # SQL Server Service
   mssql:
     container_name: mssql_container
     image: "mcr.microsoft.com/mssql/server:2019-latest"
@@ -11,17 +14,23 @@ services:
       - productmanager-network
     restart: always
     volumes:
-      - mssql-data:/var/opt/mssql 
+      - mssql-data:/var/opt/mssql
+    healthcheck:
+      test: ["CMD-SHELL", "echo 'SELECT 1' | /opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P Password123*"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
 
+  # Web API Service
   webapi:
     container_name: productmanager_webapi
     build:
       context: .
       dockerfile: src/ProductManager.WebApi/Dockerfile
     ports:
-      - "5000:80"
+      - "5000:8080"
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development 
+      - ASPNETCORE_ENVIRONMENT=Production
     depends_on:
       - mssql
     networks:

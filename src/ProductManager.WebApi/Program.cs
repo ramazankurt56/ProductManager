@@ -72,11 +72,8 @@ builder.Services.AddSwaggerGen(setup =>
 var app = builder.Build();
 
 // Geliþtirme ortamýnda Swagger'ý etkinleþtirir.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+app.UseSwagger();
+app.UseSwaggerUI();
 
 // Serilog ile istek kayýtlarýný etkinleþtirir.
 app.UseSerilogRequestLogging();
