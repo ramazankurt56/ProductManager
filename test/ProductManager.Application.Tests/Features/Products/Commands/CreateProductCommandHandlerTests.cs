@@ -97,7 +97,7 @@ public class CreateProductCommandHandlerTests
         // Assert (Sonuçlarý kontrol et)
         // Ýþlem baþarýlý olmalý ve doðru mesaj dönmeli.
         result.IsSuccessful.Should().BeTrue();
-        result.Data.Should().Be($"Product 'NewProduct' with ID {product.Id} created successfully.");
+        result.Data.Should().Be(product.Id);
 
         // Uyarý loglanmamalý.
         _loggerMock.Verify(
