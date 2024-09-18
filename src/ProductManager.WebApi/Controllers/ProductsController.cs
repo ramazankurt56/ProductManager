@@ -30,7 +30,7 @@ public class ProductsController : ApiController
     /// Yeni bir ürün oluşturur.
     /// </summary>
     /// <param name="command">Ürün oluşturma komutu.</param>
-    /// <returns>Oluşturulan ürünün detayları.</returns>
+    /// <returns>Oluşturulan ürünün idsi </returns>
     [HttpPost]
     [AllowAnonymous]
     public async Task<IActionResult> Create([FromBody] CreateProductCommand command)
@@ -44,7 +44,7 @@ public class ProductsController : ApiController
             return StatusCode(result.StatusCode, result.ErrorMessages);
         }
 
-        // Başarılı ise oluşturulan ürünü döndürür.
+        // Başarılı ise oluşturulan ürünün idsini döndürür.
         return Created("", result.Data);
     }
 

@@ -9,4 +9,4 @@ namespace ProductManager.Application.Features.Products.Commands.CreateProduct;
 /// <param name="Name">Ürünün adý.</param>
 /// <param name="Price">Ürünün fiyatý.</param>
 /// <param name="Description">Ürünün açýklamasý.</param>
-public sealed record CreateProductCommand(string Name, decimal Price, string Description) : IRequest<Result<string>>;
+public sealed record CreateProductCommand(string Name, decimal Price, string Description) : IRequest<Result<Guid>>;

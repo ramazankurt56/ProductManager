@@ -11,7 +11,7 @@ namespace ProductManager.Application.Features.Products.Commands.CreateProduct
     /// <summary>
     /// <see cref="CreateProductCommand"/> iþlemini yöneten sýnýf.
     /// </summary>
-    public sealed class CreateProductCommandHandler : IRequestHandler<CreateProductCommand, Result<string>>
+    public sealed class CreateProductCommandHandler : IRequestHandler<CreateProductCommand, Result<Guid>>
     {
         private readonly IProductRepository _productRepository;
         private readonly IUnitOfWork _unitOfWork;
@@ -43,7 +43,7 @@ namespace ProductManager.Application.Features.Products.Commands.CreateProduct
         /// <param name="request">Ürün oluþturma komutu isteði.</param>
         /// <param name="cancellationToken">Ýptal belirteci.</param>
         /// <returns>Baþarýlý bir mesaj veya hata detaylarýný içeren sonuç.</returns>
-        public async Task<Result<string>> Handle(CreateProductCommand request, CancellationToken cancellationToken)
+        public async Task<Result<Guid>> Handle(CreateProductCommand request, CancellationToken cancellationToken)
         {
             // Ayný isimde bir ürün olup olmadýðýný kontrol et
             var existingProduct = await _productRepository.GetByNameAsync(request.Name);
@@ -52,7 +52,7 @@ namespace ProductManager.Application.Features.Products.Commands.CreateProduct
             {
                 // Ürün zaten varsa logla ve hata döndür
                 _logger.LogWarning($"A product with the name '{request.Name}' already exists.");
-                return Result<string>.Failure(400, $"A product with the name '{request.Name}' already exists.");
+                return Result<Guid>.Failure(400, $"A product with the name '{request.Name}' already exists.");
             }
 
             // Komut isteðini Product entity'sine dönüþtür
@@ -66,8 +66,8 @@ namespace ProductManager.Application.Features.Products.Commands.CreateProduct
                 // Deðiþiklikleri veritabanýna kaydet
                 await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-                // Baþarýlý sonucu döndür
-                return Result<string>.Succeed($"Product '{product.Name}' with ID {product.Id} created successfully.");
+                // Baþarýlý Id döndür
+                return Result<Guid>.Succeed(product.Id);
             }
             catch (Exception ex)
             {
@@ -75,7 +75,7 @@ namespace ProductManager.Application.Features.Products.Commands.CreateProduct
                 _logger.LogError(ex, $"An error occurred while saving the product {product.Name} to the database.");
 
                 // Hata detaylarýyla birlikte baþarýsýz sonucu döndür
-                return Result<string>.Failure(500, $"An error occurred while creating the product: {ex.Message}");
+                return Result<Guid>.Failure(500, $"An error occurred while creating the product: {ex.Message}");
             }
         }
     }
