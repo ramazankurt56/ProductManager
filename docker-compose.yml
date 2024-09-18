@@ -1,0 +1,36 @@
+services:
+  mssql:
+    container_name: mssql_container
+    image: "mcr.microsoft.com/mssql/server:2019-latest"
+    environment:
+      - SA_PASSWORD=Password123*
+      - ACCEPT_EULA=Y
+    ports:
+      - "1433:1433"
+    networks:
+      - productmanager-network
+    restart: always
+    volumes:
+      - mssql-data:/var/opt/mssql 
+
+  webapi:
+    container_name: productmanager_webapi
+    build:
+      context: .
+      dockerfile: src/ProductManager.WebApi/Dockerfile
+    ports:
+      - "5000:80"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development 
+    depends_on:
+      - mssql
+    networks:
+      - productmanager-network
+    restart: always  
+
+networks:
+  productmanager-network:
+    driver: bridge
+
+volumes:
+  mssql-data:
